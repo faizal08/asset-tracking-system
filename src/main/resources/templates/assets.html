@@ -1,27 +1,149 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Asset Dashboard</title>
+    <title>Asset Tracking Dashboard</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f4f7f6; }
-        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
-        th { background-color: #007bff; color: white; text-transform: uppercase; font-size: 14px; }
-        tr:hover { background-color: #f9f9f9; }
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            /* Update extension to .jpg or .png based on your actual file in /static */
+            background: url('/dashboard.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+        }
 
-        .btn-del { color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px; }
-        .btn-edit { color: #007bff; text-decoration: none; font-weight: bold; cursor: pointer; }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        }
 
-        .form-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; border-left: 5px solid #28a745; }
-        input, select { padding: 10px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-add { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
-        .btn-add:hover { background-color: #218838; }
+        h2 {
+            margin-top: 0;
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(0, 210, 255, 0.5);
+            padding-bottom: 15px;
+            color: #00d2ff;
+        }
 
-        .logout-link { float: right; }
-        .logout-btn { background: none; border: 1px solid #666; color: #666; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
-        .logout-btn:hover { background: #666; color: white; }
+        /* Form Section Styling */
+        .form-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-section h4 {
+            margin-top: 0;
+            color: #51cf66;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        input, select {
+            padding: 12px;
+            margin-right: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            color: white;
+            outline: none;
+        }
+
+        option {
+            background: #1a1a1a; /* Dark background for dropdown options */
+            color: white;
+        }
+
+        .btn-add {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-add:hover {
+            background-color: #218838;
+            box-shadow: 0 0 15px rgba(40, 167, 69, 0.4);
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            background: rgba(0, 210, 255, 0.2);
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-edit {
+            color: #00d2ff;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .btn-del {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Logout Positioning */
+        .logout-link {
+            float: right;
+        }
+
+        .logout-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255, 69, 69, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -30,19 +152,19 @@
         <button type="submit" class="logout-btn">Logout</button>
     </form>
 
-    <h2>📦 Asset Tracking Dashboard</h2>
+    <h2>📦 Asset Management Center</h2>
 
     <div class="form-section">
-        <h4>Add New Asset</h4>
+        <h4>Register New Hardware</h4>
         <form th:action="@{/assets-ui/add}" th:object="${newAsset}" method="post">
-            <input type="text" th:field="*{name}" placeholder="Asset Name (e.g. MacBook Pro)" required />
-            <input type="text" th:field="*{type}" placeholder="Type (e.g. Laptop)" required />
+            <input type="text" th:field="*{name}" placeholder="Asset Name" required />
+            <input type="text" th:field="*{type}" placeholder="Type (Laptop/Server)" required />
             <select th:field="*{status}">
                 <option value="Available">Available</option>
                 <option value="Assigned">Assigned</option>
                 <option value="Maintenance">Maintenance</option>
             </select>
-            <button type="submit" class="btn-add">Save Asset</button>
+            <button type="submit" class="btn-add">Deploy Asset</button>
         </form>
     </div>
 
@@ -59,20 +181,20 @@
         <tbody>
         <tr th:each="asset : ${assets}">
             <td th:text="${asset.id}"></td>
-            <td><input type="text" th:id="'name-' + ${asset.id}" th:value="${asset.name}" style="width:120px; padding:5px;"></td>
+            <td><input type="text" th:id="'name-' + ${asset.id}" th:value="${asset.name}" style="width:150px;"></td>
             <td th:text="${asset.type}"></td>
             <td>
-                <select th:id="'status-' + ${asset.id}" style="padding:5px;">
+                <select th:id="'status-' + ${asset.id}">
                     <option value="Available" th:selected="${asset.status == 'Available'}">Available</option>
                     <option value="Assigned" th:selected="${asset.status == 'Assigned'}">Assigned</option>
                     <option value="Maintenance" th:selected="${asset.status == 'Maintenance'}">Maintenance</option>
                 </select>
             </td>
             <td>
-                <a href="javascript:void(0)" class="btn-edit" th:onclick="'patchAsset(' + ${asset.id} + ')'">Update (PATCH)</a>
+                <a href="javascript:void(0)" class="btn-edit" th:onclick="'patchAsset(' + ${asset.id} + ')'">Update</a>
 
                 <a th:href="@{'/assets-ui/delete/' + ${asset.id}}" class="btn-del"
-                   onclick="return confirm('Confirm soft-delete? This asset will be hidden from all lists but remain in the DB.')">Delete</a>
+                   onclick="return confirm('Initiate Soft-Delete? Data will remain in vault but exit visibility.')">Delete</a>
             </td>
         </tr>
         </tbody>
@@ -96,10 +218,10 @@
         });
 
         if (response.ok) {
-            alert('Asset ID ' + id + ' updated successfully via PATCH request!');
-            location.reload(); // Refresh to show updated data
+            alert('Protocol Updated: Asset ' + id + ' modified via PATCH.');
+            location.reload();
         } else {
-            alert('Failed to update asset.');
+            alert('Update Failed.');
         }
     }
 </script>

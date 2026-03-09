@@ -1,22 +1,104 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Login</title>
+    <title>Login - Asset Tracking System</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; margin-top: 100px; }
-        form { border: 1px solid #ccc; padding: 20px; border-radius: 8px; }
-        input { display: block; margin-bottom: 10px; padding: 8px; width: 200px; }
-        button { width: 100%; padding: 8px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            /* Positions the box on the right side to keep the 'Asset Node' graphic visible */
+            justify-content: flex-end;
+            align-items: center;
+            /* Ensure the extension matches your file (.png) */
+            background: url('/asset_tracking_loginpage.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .login-container {
+            margin-right: 10%;
+            width: 350px;
+            padding: 40px;
+            /* Glassmorphism effect: transparent background with blur */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            /* Clean white border for a professional look */
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            color: white;
+            text-align: center;
+        }
+
+        h3 {
+            margin-bottom: 30px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        input {
+            display: block;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* Makes the placeholders 'admin' and 'admin123' clearly visible */
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.9);
+            font-style: italic;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            /* Matching the cyan glow in your uploaded image */
+            background-color: #00d2ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        button:hover {
+            background-color: #00a8cc;
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.5);
+        }
+
+        .status-msg {
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
-<form th:action="@{/auth/login}" method="post">
-    <h3>Asset System Login</h3>
-    <div th:if="${param.error}" style="color:red">Invalid credentials.</div>
-    <div th:if="${param.logout}" style="color:green">Logged out successfully.</div>
-    <input type="text" name="username" placeholder="Username (admin)" required>
-    <input type="password" name="password" placeholder="Password (admin123)" required>
-    <button type="submit">Login</button>
-</form>
+
+<div class="login-container">
+    <form th:action="@{/auth/login}" method="post">
+        <h3>System Access</h3>
+
+        <div th:if="${param.error}" class="status-msg" style="color: #ff6b6b;">Invalid credentials.</div>
+        <div th:if="${param.logout}" class="status-msg" style="color: #51cf66;">Logged out successfully.</div>
+
+        <input type="text" name="username" placeholder="Username (admin)" required>
+        <input type="password" name="password" placeholder="Password (admin123)" required>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
 </body>
 </html>

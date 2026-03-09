@@ -15,13 +15,14 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
+                        // Permitting the login image so it can load on the login page
+                        .requestMatchers("/auth/**", "/asset_tracking_loginpage.png").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .loginProcessingUrl("/auth/login")
-                        .defaultSuccessUrl("/assets", true)
+                        .defaultSuccessUrl("/assets-ui", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
