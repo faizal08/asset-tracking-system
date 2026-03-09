@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Asset Dashboard</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background-color: #f4f7f6; }
+        .container { max-width: 1000px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        h2 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
+        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background-color: #007bff; color: white; text-transform: uppercase; font-size: 14px; }
+        tr:hover { background-color: #f9f9f9; }
+
+        .btn-del { color: #dc3545; text-decoration: none; font-weight: bold; margin-left: 10px; }
+        .btn-edit { color: #007bff; text-decoration: none; font-weight: bold; cursor: pointer; }
+
+        .form-section { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 30px; border-left: 5px solid #28a745; }
+        input, select { padding: 10px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-add { background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-add:hover { background-color: #218838; }
+
+        .logout-link { float: right; }
+        .logout-btn { background: none; border: 1px solid #666; color: #666; padding: 5px 10px; border-radius: 4px; cursor: pointer; transition: 0.3s; }
+        .logout-btn:hover { background: #666; color: white; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <form th:action="@{/auth/logout}" method="post" class="logout-link">
+        <button type="submit" class="logout-btn">Logout</button>
+    </form>
+
+    <h2>📦 Asset Tracking Dashboard</h2>
+
+    <div class="form-section">
+        <h4>Add New Asset</h4>
+        <form th:action="@{/assets-ui/add}" th:object="${newAsset}" method="post">
+            <input type="text" th:field="*{name}" placeholder="Asset Name (e.g. MacBook Pro)" required />
+            <input type="text" th:field="*{type}" placeholder="Type (e.g. Laptop)" required />
+            <select th:field="*{status}">
+                <option value="Available">Available</option>
+                <option value="Assigned">Assigned</option>
+                <option value="Maintenance">Maintenance</option>
+            </select>
+            <button type="submit" class="btn-add">Save Asset</button>
+        </form>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="asset : ${assets}">
+            <td th:text="${asset.id}"></td>
+            <td><input type="text" th:id="'name-' + ${asset.id}" th:value="${asset.name}" style="width:120px; padding:5px;"></td>
+            <td th:text="${asset.type}"></td>
+            <td>
+                <select th:id="'status-' + ${asset.id}" style="padding:5px;">
+                    <option value="Available" th:selected="${asset.status == 'Available'}">Available</option>
+                    <option value="Assigned" th:selected="${asset.status == 'Assigned'}">Assigned</option>
+                    <option value="Maintenance" th:selected="${asset.status == 'Maintenance'}">Maintenance</option>
+                </select>
+            </td>
+            <td>
+                <a href="javascript:void(0)" class="btn-edit" th:onclick="'patchAsset(' + ${asset.id} + ')'">Update (PATCH)</a>
+
+                <a th:href="@{'/assets-ui/delete/' + ${asset.id}}" class="btn-del"
+                   onclick="return confirm('Confirm soft-delete? This asset will be hidden from all lists but remain in the DB.')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script>
+    async function patchAsset(id) {
+        const nameValue = document.getElementById('name-' + id).value;
+        const statusValue = document.getElementById('status-' + id).value;
+
+        const response = await fetch('/assets/' + id, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: nameValue,
+                status: statusValue
+            })
+        });
+
+        if (response.ok) {
+            alert('Asset ID ' + id + ' updated successfully via PATCH request!');
+            location.reload(); // Refresh to show updated data
+        } else {
+            alert('Failed to update asset.');
+        }
+    }
+</script>
+</body>
+</html>
