@@ -1,0 +1,7 @@
+# Ignore all HTML and CSS for language statistics
+src/main/resources/templates/**/*.html linguist-detectable=false
+src/main/resources/static/**/*.css linguist-detectable=false
+src/main/resources/static/**/*.png linguist-detectable=false
+
+# Ensure Java is the primary focus
+*.java linguist-detectable=true
